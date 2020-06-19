@@ -1,15 +1,15 @@
 <!-- Workaround. Remove once we're on 3.1.300+
 https://github.com/dotnet/sourcelink/issues/572 -->
 <Project>
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)"/>
-  </ItemGroup>
+  </ItemGroup>-->
 
   <!-- Workaround for https://github.com/dotnet/sdk/issues/11105 -->
-  <ItemGroup>
+  <!--<ItemGroup>
     <SourceRoot Include="$(NuGetPackageRoot)" Condition="'$(NuGetPackageRoot)' != ''" />
-  </ItemGroup>  
+  </ItemGroup>-->
 </Project>
