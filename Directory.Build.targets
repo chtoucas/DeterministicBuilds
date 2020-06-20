@@ -13,8 +13,22 @@
   <!-- Workaround for https://github.com/dotnet/sdk/issues/11105 -->
   <!--
   <ItemGroup>
-    <SourceRoot Include="$(NuGetPackageRoot)" Condition="'$(NuGetPackageRoot)' != ''" />
+    <SourceRoot Include="$(NuGetPackageRoot)" Condition=" '$(NuGetPackageRoot)' != '' " />
   </ItemGroup>
   -->
+
+  <!-- https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/DeterministicBuild.md -->
+  <!--
+    If we don't add this target, we get an empty CC.
+    If we add it, Coverlet fails with "The given key '' was not present in the dictionary".
+   -->
+  <Target Name="CoverletGetPathMap"
+          DependsOnTargets="InitializeSourceRootMappedPaths"
+          Returns="@(_LocalTopLevelSourceRoot)"
+          Condition=" '$(DeterministicSourcePaths)' == 'true' ">
+    <ItemGroup>
+      <_LocalTopLevelSourceRoot Include="@(SourceRoot)" Condition="'%(SourceRoot.NestedRoot)' == ''"/>
+    </ItemGroup>
+  </Target>
 
 </Project>

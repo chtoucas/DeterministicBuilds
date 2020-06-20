@@ -4,19 +4,30 @@
     <Authors>AuthorName</Authors>
     <Company>CompanyName</Company>
 
-    <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+    <EnableSourceLink Condition=" '$(EnableSourceLink)' == '' ">true</EnableSourceLink>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!--<IncludeSymbols>true</IncludeSymbols>-->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+  <PropertyGroup Condition=" '$(CI)' == 'true' ">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" '$(EnableSourceLink)' == 'false' and '$(ContinuousIntegrationBuild)' == 'true' ">
+    <!--
+      Then, if we don't import "Microsoft.SourceLink.GitHub", a build will fail
+      complaining about "SourceRoot".
+
+      Deterministic = true (default) and ContinuousIntegrationBuild = true imply
+      DeterministicSourcePaths = true.
+      https://github.com/dotnet/roslyn/blob/master/src/Compilers/Core/MSBuildTask/Microsoft.Managed.Core.targets#L131
+    -->
+    <SourceRoot Include="$(MSBuildThisFileDirectory)"/>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(EnableSourceLink)' == 'true' ">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
   </ItemGroup>
 

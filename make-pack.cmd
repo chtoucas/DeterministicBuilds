@@ -1,7 +1,10 @@
 @echo off
 @setlocal
 
-@call dotnet pack /p:TF_BUILD=true --output artifacts
+@echo Cleaning up...
+@call dotnet clean --nologo -v:minimal
+
+@call dotnet pack %* --output artifacts
 
 @endlocal
 @exit /b %ERRORLEVEL%
