@@ -17,16 +17,9 @@
   </ItemGroup>
   -->
 
-  <ItemGroup Condition=" '$(EnableSourceLink)' == 'false' and '$(ContinuousIntegrationBuild)' == 'true' ">
-    <!--
-      If we don't import "Microsoft.SourceLink.GitHub", a build will fail
-      complaining about "SourceRoot".
-
-      Deterministic = true (default) and ContinuousIntegrationBuild = true imply
-      DeterministicSourcePaths = true.
-      https://github.com/dotnet/roslyn/blob/master/src/Compilers/Core/MSBuildTask/Microsoft.Managed.Core.targets#L131
-    -->
-    <SourceRoot Include="$(RepositoryRoot)"/>
+  <ItemGroup Condition=" '$(EnableSourceLink)' == 'false' ">
+    <!-- When we don't import "Microsoft.SourceLink.GitHub", dotnet.exe fails complaining about "SourceRoot" -->
+    <SourceRoot Include="$(RepositoryRoot)" Condition=" '$(ContinuousIntegrationBuild)' == 'true' "/>
   </ItemGroup>
 
   <ItemGroup Condition=" '$(EnableSourceLink)' == 'true' ">
@@ -35,24 +28,21 @@
 
   <!-- https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/DeterministicBuild.md -->
   <!--
-    With UseSourceLink = false.
-      Coverlet works fine but, of course, with local paths.
-    With UseSourceLink = true.
-      If we don't add this target, we get an empty CC.
-      If we add it, Coverlet throws KeyNotFoundException.
+    When UseSourceLink = true and ContinuousIntegrationBuild = true.
+      Without this target, we get an empty CC.
+      With this target, Coverlet throws KeyNotFoundException.
+
+    Remark:
+      Deterministic = true (default) and ContinuousIntegrationBuild = true imply
+      DeterministicSourcePaths = true.
+      https://github.com/dotnet/roslyn/blob/master/src/Compilers/Core/MSBuildTask/Microsoft.Managed.Core.targets#L131
    -->
   <Target Name="CoverletGetPathMap"
           DependsOnTargets="InitializeSourceRootMappedPaths"
           Returns="@(_LocalTopLevelSourceRoot)"
           Condition=" '$(DeterministicSourcePaths)' == 'true' ">
 
-    <Message Text="In CoverletGetPathMap:" Importance="high" />
-    <Message Text="- ContinuousIntegrationBuild      = $(ContinuousIntegrationBuild)" Importance="high" />
-    <Message Text="- Deterministic (true)            = $(Deterministic)" Importance="high" />
-    <Message Text="- DeterministicSourcePaths (true) = $(DeterministicSourcePaths)" Importance="high" />
-    <Message Text="- EnableSourceLink                = $(EnableSourceLink)" Importance="high" />
-    <Message Text="- UseSourceLink (MSBuild-only)    = $(UseSourceLink)" Importance="high" />
-    <Message Text="- SourceRoot                      = @(SourceRoot)" Importance="high" />
+    <Message Text="CoverletGetPathMap: SourceRoot = @(SourceRoot)" Importance="high" />
 
     <ItemGroup>
       <_LocalTopLevelSourceRoot Include="@(SourceRoot)" Condition="'%(SourceRoot.NestedRoot)' == ''"/>

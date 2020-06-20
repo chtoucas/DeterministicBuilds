@@ -18,18 +18,21 @@ make-pack.cmd /p:ContinuousIntegrationBuild=true
 Coverlet with `UseSourceLink = false` works fine.
 ```
 make-test.cmd
-make-test.cmd /p:ContinuousIntegrationBuild=true
 make-test-xplat.cmd
+make-test.cmd /p:ContinuousIntegrationBuild=true
 make-test-xplat.cmd /p:ContinuousIntegrationBuild=true
 ```
-Coverlet with `UseSourceLink = true` fails when `ContinuousIntegrationBuild = true`.
+Coverlet with `UseSourceLink = true` and `ContinuousIntegrationBuild = false` works fine.
 ```
 make-test.cmd /p:UseSourceLink=true
-make-test.cmd /p:UseSourceLink=true /p:ContinuousIntegrationBuild=true
 make-test-xplat.cmd --settings coverlet.USL.runsettings
-make-test-xplat.cmd --settings coverlet.USL.runsettings /p:ContinuousIntegrationBuild=true
 ```
 
+Coverlet with `UseSourceLink = true` and `ContinuousIntegrationBuild = true` fails.
+```
+make-test.cmd /p:UseSourceLink=true /p:ContinuousIntegrationBuild=true
+make-test-xplat.cmd --settings coverlet.USL.runsettings /p:ContinuousIntegrationBuild=true
+```
 Diagnostic (see failure.txt).
 ```
 Data collector 'XPlat code coverage' message: [coverlet]Coverlet.Collector.Utilities.CoverletDataCollectorException: CoverletCoverageDataCollector: Failed to get coverage result
