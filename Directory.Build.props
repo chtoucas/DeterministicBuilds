@@ -11,10 +11,6 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(CI)' == 'true' ">
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-  </PropertyGroup>
-
   <ItemGroup Condition=" '$(EnableSourceLink)' == 'false' and '$(ContinuousIntegrationBuild)' == 'true' ">
     <!--
       Then, if we don't import "Microsoft.SourceLink.GitHub", a build will fail

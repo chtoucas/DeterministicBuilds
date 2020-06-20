@@ -19,8 +19,11 @@
 
   <!-- https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/DeterministicBuild.md -->
   <!--
-    If we don't add this target, we get an empty CC.
-    If we add it, Coverlet fails with "The given key '' was not present in the dictionary".
+    With UseSourceLink = false.
+      Coverlet works fine but, of course, with local paths.
+    With UseSourceLink = true.
+      If we don't add this target, we get an empty CC.
+      If we add it, Coverlet fails with "The given key '' was not present in the dictionary".
    -->
   <Target Name="CoverletGetPathMap"
           DependsOnTargets="InitializeSourceRootMappedPaths"

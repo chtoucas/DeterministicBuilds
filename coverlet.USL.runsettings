@@ -6,7 +6,7 @@
         <Configuration>
           <Format>json,cobertura,opencover</Format>
           <Include>[MyLibrary]*</Include>
-          <UseSourceLink>false</UseSourceLink>
+          <UseSourceLink>true</UseSourceLink>
         </Configuration>
       </DataCollector>
     </DataCollectors>
