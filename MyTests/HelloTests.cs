@@ -1,12 +1,12 @@
 using Xunit;
-using ClassLibrary1;
+using MyLibrary;
 
-namespace XUnitTestProject1
+namespace MyTests
 {
-    public class UnitTest1
+    public class HelloTests
     {
         [Fact]
-        public void Test1()
+        public void Who()
         {
             Assert.Equal("John Doe", new Hello("John Doe").Who);
         }

@@ -4,6 +4,8 @@
     <Authors>AuthorName</Authors>
     <Company>CompanyName</Company>
 
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>

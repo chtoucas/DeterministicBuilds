@@ -4,8 +4,8 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
-          <Include>[ClassLibrary1]*</Include>
-          <UseSourceLink>true</UseSourceLink>
+          <Include>[MyLibrary]*</Include>
+          <UseSourceLink>false</UseSourceLink>
         </Configuration>
       </DataCollector>
     </DataCollectors>
