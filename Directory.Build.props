@@ -15,20 +15,4 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(EnableSourceLink)' == 'false' and '$(ContinuousIntegrationBuild)' == 'true' ">
-    <!--
-      If we don't import "Microsoft.SourceLink.GitHub", a build will fail
-      complaining about "SourceRoot".
-
-      Deterministic = true (default) and ContinuousIntegrationBuild = true imply
-      DeterministicSourcePaths = true.
-      https://github.com/dotnet/roslyn/blob/master/src/Compilers/Core/MSBuildTask/Microsoft.Managed.Core.targets#L131
-    -->
-    <SourceRoot Include="$(RepositoryRoot)"/>
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(EnableSourceLink)' == 'true' ">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
-
 </Project>

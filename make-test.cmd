@@ -6,9 +6,7 @@
 
 @call dotnet test %* ^
     /p:CollectCoverage=true ^
-    /p:CoverletOutputFormat=\"json,cobertura,opencover\" ^
-    /p:CoverletOutput=..\artifacts\ ^
-    /p:Include="[MyLibrary]*"
+    /p:CoverletOutput=..\artifacts\
 
 @endlocal
 @exit /b %ERRORLEVEL%

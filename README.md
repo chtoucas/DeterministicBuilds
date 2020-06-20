@@ -1,51 +1,46 @@
-# Deterministic Builds
+# SourceLink + Coverlet + Deterministic build w/ .NET Core v3.1.301
 
-This repo shows how to get a fully deterministic build using [Source Link](https://github.com/dotnet/sourcelink).
-Deterministic builds are important as they enable verification that the resulting binary was built from 
-the specified source and provides traceability. 
+### Packing
 
-Deterministic builds require a property to be set to true during CI:
-`ContinuousIntegrationBuild`. These should not be enabled during local dev or the debugger
-won't be able to find the local source files.
-
-Therefore, you should use your CI system's variable to set them conditionally. For Azure Pipelines, it 
-looks like this
-
-```xml
-<PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
-  <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-</PropertyGroup>
+Non-deterministic packing.
+```
+make-pack.cmd
+```
+Deterministic packing.
+```
+make-pack.cmd /p:ContinuousIntegrationBuild=true
 ```
 
-For GitHub Actions, the variable is `GITHUB_ACTIONS`, so the result would be:
-```xml
-<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-  <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-</PropertyGroup>
+### Code Coverage
+
+Code Coverage with `UseSourceLink = false`.
+```
+make-test.cmd
+make-test.cmd /p:ContinuousIntegrationBuild=true
+make-test-xplat.cmd
+make-test-xplat.cmd /p:ContinuousIntegrationBuild=true
+```
+Code Coverage with `UseSourceLink = true` fails when `ContinuousIntegrationBuild = true`.
+```
+make-test.cmd /p:UseSourceLink=true
+make-test.cmd /p:UseSourceLink=true /p:ContinuousIntegrationBuild=true
+make-test-xplat.cmd --settings coverlet.USL.runsettings
+make-test-xplat.cmd --settings coverlet.USL.runsettings /p:ContinuousIntegrationBuild=true
 ```
 
-
-`EmbedUntrackedSources` should also be set to true so that compiler-generated source, like AssemblyInfo, are included
-in the PDB. 
-
-**Update** .NET Core SDK 3.1.300 is out and should be used instead of the workarounds below. the 3.1.300 SDK can target all lower target frameworks.
-
-Note that there's a [workaround](https://github.com/dotnet/sourcelink/issues/572) needed for many SDK's prior to 3.1.300. You'll need to add
-a `Directory.Build.targets` file with the following:
-
-```xml
-<Project>
-  <PropertyGroup>
-    <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)"/>
-  </ItemGroup>
-</Project>
-
+Diagnostic (see failure.txt)
+```
+Data collector 'XPlat code coverage' message: [coverlet]Coverlet.Collector.Utilities.CoverletDataCollectorException: CoverletCoverageDataCollector: Failed to get coverage result
+ ---> System.Collections.Generic.KeyNotFoundException: The given key '' was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at Coverlet.Core.Coverage.GetSourceLinkUrl(Dictionary`2 sourceLinkDocuments, String document) in /_/src/coverlet.core/Coverage.cs:line 452
+   at Coverlet.Core.Coverage.CalculateCoverage() in /_/src/coverlet.core/Coverage.cs:line 350
+   at Coverlet.Core.Coverage.GetCoverageResult() in /_/src/coverlet.core/Coverage.cs:line 141
+   at Coverlet.Collector.DataCollection.CoverageWrapper.GetCoverageResult(Coverage coverage) in /_/src/coverlet.collector/DataCollection/CoverageWrapper.cs:line 44
+   at Coverlet.Collector.DataCollection.CoverageManager.GetCoverageResult() in /_/src/coverlet.collector/DataCollection/CoverageManager.cs:line 93
+   --- End of inner exception stack trace ---
+   at Coverlet.Collector.DataCollection.CoverageManager.GetCoverageResult() in /_/src/coverlet.collector/DataCollection/CoverageManager.cs:line 98
+   at Coverlet.Collector.DataCollection.CoverletCoverageCollector.OnSessionEnd(Object sender, SessionEndEventArgs e) in /_/src/coverlet.collector/DataCollection/CoverletCoverageCollector.cs:line 160.
 ```
 
- 
-## Building locally
-To see/test this locally, build with `dotnet build /p:TF_BUILD=true`. If you examine the resulting package in [NuGet Package Explorer](https://github.com/NuGetPackageExplorer/NuGetPackageExplorer),
-it will pass.
+The file `CoverletSourceRootsMapping` seems wrong???

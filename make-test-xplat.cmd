@@ -6,8 +6,7 @@
 
 @call dotnet test %* ^
     --collect:"XPlat Code Coverage" ^
-    --results-directory artifacts ^
-    --settings coverlet.runsettings
+    --results-directory artifacts
 
 @endlocal
 @exit /b %ERRORLEVEL%
