@@ -1,6 +1,6 @@
-<!-- Workaround. Remove once we're on 3.1.300+
-https://github.com/dotnet/sourcelink/issues/572 -->
 <Project>
+
+  <!-- Workaround for https://github.com/dotnet/sourcelink/issues/572 -->
   <!--
   <PropertyGroup>
     <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
@@ -16,4 +16,5 @@ https://github.com/dotnet/sourcelink/issues/572 -->
     <SourceRoot Include="$(NuGetPackageRoot)" Condition="'$(NuGetPackageRoot)' != ''" />
   </ItemGroup>
   -->
+
 </Project>
