@@ -4,6 +4,10 @@
     <Authors>AuthorName</Authors>
     <Company>CompanyName</Company>
 
+    <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+
+    <PackageOutputPath>$(RepositoryRoot)artifacts\</PackageOutputPath>
+
     <EnableSourceLink Condition=" '$(EnableSourceLink)' == '' ">true</EnableSourceLink>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -13,18 +17,18 @@
 
   <ItemGroup Condition=" '$(EnableSourceLink)' == 'false' and '$(ContinuousIntegrationBuild)' == 'true' ">
     <!--
-      Then, if we don't import "Microsoft.SourceLink.GitHub", a build will fail
+      If we don't import "Microsoft.SourceLink.GitHub", a build will fail
       complaining about "SourceRoot".
 
       Deterministic = true (default) and ContinuousIntegrationBuild = true imply
       DeterministicSourcePaths = true.
       https://github.com/dotnet/roslyn/blob/master/src/Compilers/Core/MSBuildTask/Microsoft.Managed.Core.targets#L131
     -->
-    <SourceRoot Include="$(MSBuildThisFileDirectory)"/>
+    <SourceRoot Include="$(RepositoryRoot)"/>
   </ItemGroup>
 
   <ItemGroup Condition=" '$(EnableSourceLink)' == 'true' ">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

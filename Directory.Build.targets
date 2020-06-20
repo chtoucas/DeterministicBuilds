@@ -23,12 +23,21 @@
       Coverlet works fine but, of course, with local paths.
     With UseSourceLink = true.
       If we don't add this target, we get an empty CC.
-      If we add it, Coverlet fails with "The given key '' was not present in the dictionary".
+      If we add it, Coverlet throws KeyNotFoundException.
    -->
   <Target Name="CoverletGetPathMap"
           DependsOnTargets="InitializeSourceRootMappedPaths"
           Returns="@(_LocalTopLevelSourceRoot)"
           Condition=" '$(DeterministicSourcePaths)' == 'true' ">
+
+    <Message Text="In CoverletGetPathMap:" Importance="high" />
+    <Message Text="- ContinuousIntegrationBuild      = $(ContinuousIntegrationBuild)" Importance="high" />
+    <Message Text="- Deterministic (true)            = $(Deterministic)" Importance="high" />
+    <Message Text="- DeterministicSourcePaths (true) = $(DeterministicSourcePaths)" Importance="high" />
+    <Message Text="- EnableSourceLink                = $(EnableSourceLink)" Importance="high" />
+    <Message Text="- UseSourceLink (MSBuild-only)    = $(UseSourceLink)" Importance="high" />
+    <Message Text="- SourceRoot                      = @(SourceRoot)" Importance="high" />
+
     <ItemGroup>
       <_LocalTopLevelSourceRoot Include="@(SourceRoot)" Condition="'%(SourceRoot.NestedRoot)' == ''"/>
     </ItemGroup>
