@@ -1,16 +1,13 @@
 <Project>
 
   <PropertyGroup>
-    <Authors>AuthorName</Authors>
-    <Company>CompanyName</Company>
-
-    <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
-
-    <PackageOutputPath>$(RepositoryRoot)artifacts\</PackageOutputPath>
-
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
 
 </Project>

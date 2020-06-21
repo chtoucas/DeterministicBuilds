@@ -33,7 +33,7 @@ Coverlet with `UseSourceLink = true` and `ContinuousIntegrationBuild = true` fai
 dotnet test /p:CollectCoverage=true /p:UseSourceLink=true /p:ContinuousIntegrationBuild=true
 dotnet test --collect:"XPlat Code Coverage" --settings coverlet.USL.runsettings /p:ContinuousIntegrationBuild=true
 ```
-Detailed error (see failure.txt).
+Detailed error:
 ```
 Data collector 'XPlat code coverage' message: [coverlet]Coverlet.Collector.Utilities.CoverletDataCollectorException: CoverletCoverageDataCollector: Failed to get coverage result
  ---> System.Collections.Generic.KeyNotFoundException: The given key '' was not present in the dictionary.
@@ -47,5 +47,3 @@ Data collector 'XPlat code coverage' message: [coverlet]Coverlet.Collector.Utili
    at Coverlet.Collector.DataCollection.CoverageManager.GetCoverageResult() in /_/src/coverlet.collector/DataCollection/CoverageManager.cs:line 98
    at Coverlet.Collector.DataCollection.CoverletCoverageCollector.OnSessionEnd(Object sender, SessionEndEventArgs e) in /_/src/coverlet.collector/DataCollection/CoverletCoverageCollector.cs:line 160.
 ```
-
-The file `CoverletSourceRootsMapping` seems wrong???
