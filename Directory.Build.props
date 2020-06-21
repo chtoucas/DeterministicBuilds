@@ -8,8 +8,6 @@
 
     <PackageOutputPath>$(RepositoryRoot)artifacts\</PackageOutputPath>
 
-    <EnableSourceLink Condition=" '$(EnableSourceLink)' == '' ">true</EnableSourceLink>
-
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

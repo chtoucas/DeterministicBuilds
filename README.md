@@ -1,39 +1,39 @@
 # Coverlet + Source Link + Deterministic build
 
-.NET Core version: 3.1.300+
+.NET Core version 3.1.300+
 
 ### Packing
 
 Non-deterministic packing.
 ```
-make-pack.cmd
+dotnet pack
 ```
 Deterministic packing.
 ```
-make-pack.cmd /p:ContinuousIntegrationBuild=true
+dotnet pack /p:ContinuousIntegrationBuild=true
 ```
 
 ### Code Coverage
 
 Coverlet with `UseSourceLink = false` works fine.
 ```
-make-test.cmd
-make-test-xplat.cmd
-make-test.cmd /p:ContinuousIntegrationBuild=true
-make-test-xplat.cmd /p:ContinuousIntegrationBuild=true
+dotnet test /p:CollectCoverage=true
+dotnet test /p:CollectCoverage=true /p:ContinuousIntegrationBuild=true
+dotnet test --collect:"XPlat Code Coverage"
+dotnet test --collect:"XPlat Code Coverage" /p:ContinuousIntegrationBuild=true
 ```
 Coverlet with `UseSourceLink = true` and `ContinuousIntegrationBuild = false` works fine.
 ```
-make-test.cmd /p:UseSourceLink=true
-make-test-xplat.cmd --settings coverlet.USL.runsettings
+dotnet test /p:CollectCoverage=true /p:UseSourceLink=true
+dotnet test --collect:"XPlat Code Coverage" --settings coverlet.USL.runsettings
 ```
 
 Coverlet with `UseSourceLink = true` and `ContinuousIntegrationBuild = true` fails.
 ```
-make-test.cmd /p:UseSourceLink=true /p:ContinuousIntegrationBuild=true
-make-test-xplat.cmd --settings coverlet.USL.runsettings /p:ContinuousIntegrationBuild=true
+dotnet test /p:CollectCoverage=true /p:UseSourceLink=true /p:ContinuousIntegrationBuild=true
+dotnet test --collect:"XPlat Code Coverage" --settings coverlet.USL.runsettings /p:ContinuousIntegrationBuild=true
 ```
-Diagnostic (see failure.txt).
+Detailed error (see failure.txt).
 ```
 Data collector 'XPlat code coverage' message: [coverlet]Coverlet.Collector.Utilities.CoverletDataCollectorException: CoverletCoverageDataCollector: Failed to get coverage result
  ---> System.Collections.Generic.KeyNotFoundException: The given key '' was not present in the dictionary.
