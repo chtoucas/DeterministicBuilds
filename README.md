@@ -15,6 +15,8 @@ dotnet pack /p:ContinuousIntegrationBuild=true
 
 ### Code Coverage
 
+IMPORTANT: reset the repository between each run (reset.ps1).
+
 Coverlet with `UseSourceLink = false` works fine.
 ```
 dotnet test /p:CollectCoverage=true
@@ -46,4 +48,10 @@ Data collector 'XPlat code coverage' message: [coverlet]Coverlet.Collector.Utili
    --- End of inner exception stack trace ---
    at Coverlet.Collector.DataCollection.CoverageManager.GetCoverageResult() in /_/src/coverlet.collector/DataCollection/CoverageManager.cs:line 98
    at Coverlet.Collector.DataCollection.CoverletCoverageCollector.OnSessionEnd(Object sender, SessionEndEventArgs e) in /_/src/coverlet.collector/DataCollection/CoverletCoverageCollector.cs:line 160.
+```
+
+If we force `DeterministicSourcePaths` to `false`, things work again.
+The build won't be fully deterministic, but Coverlet will use Source Link.
+```
+dotnet test /p:CollectCoverage=true /p:UseSourceLink=true /p:ContinuousIntegrationBuild=true /p:DeterministicSourcePaths=false
 ```
