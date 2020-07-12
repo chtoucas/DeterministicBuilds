@@ -19,15 +19,22 @@
 
   <!-- https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/DeterministicBuild.md -->
   <!--
-    When UseSourceLink = true and ContinuousIntegrationBuild = true.
-      Without this target, we get an empty CC.
-      With this target, Coverlet throws KeyNotFoundException.
+    Without this target, we may get an empty CC:
+      OK:     dotnet test /p:CollectCoverage=true
+      EMPTY:  dotnet test /p:CollectCoverage=true /p:ContinuousIntegrationBuild=true
+      OK:     dotnet test /p:CollectCoverage=true /p:UseSourceLink=true
+      EMPTY:  dotnet test /p:CollectCoverage=true /p:UseSourceLink=true /p:ContinuousIntegrationBuild=true
+    With this target, these commands succeed with the current nightly builds of
+    Coverlet (stable builds throw KeyNotFoundException with the latest command).
 
     Remark:
+    The reason why the CC report is empty is only indirectly related to
+    ContinuousIntegrationBuild, the real culprit is DeterministicSourcePaths when
+    it is set to true.
       Deterministic = true (default) and ContinuousIntegrationBuild = true imply
       DeterministicSourcePaths = true.
       https://github.com/dotnet/roslyn/blob/master/src/Compilers/Core/MSBuildTask/Microsoft.Managed.Core.targets#L131
-   -->
+  -->
   <Target Name="CoverletGetPathMap"
           DependsOnTargets="InitializeSourceRootMappedPaths"
           Returns="@(_LocalTopLevelSourceRoot)"

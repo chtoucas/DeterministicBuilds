@@ -4,6 +4,8 @@
 
 ### Packing
 
+NB: before packing, please reset the repository (reset.ps1).
+
 Non-deterministic packing.
 ```
 dotnet pack
@@ -16,6 +18,8 @@ dotnet pack /p:ContinuousIntegrationBuild=true
 ### Code Coverage
 
 IMPORTANT: reset the repository between each run (reset.ps1).
+
+UPDATE: fixed with the current nightly builds of coverlet.
 
 Coverlet with `UseSourceLink = false` works fine.
 ```
